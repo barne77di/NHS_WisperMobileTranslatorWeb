@@ -1,0 +1,167 @@
+﻿@{
+    Layout = "/Views/Mobile/Shared/_Layout.cshtml";
+    var err = TempData["Error"] as string;
+}
+<section class="card" style="max-width:760px;margin:24px auto;">
+    <h2 class="nhs-title" style="margin:0;">Whisper Translator</h2>
+    <p class="hint" style="margin:6px 0 16px;">Start a new translation or find a previous one.</p>
+
+    <div class="nhs-action-grid">
+        <button class="nhs-action" id="btnCreate">
+            <span class="nhs-action__icon">➕</span>
+            <span class="nhs-action__text">
+                <strong>Create new Translation</strong>
+                <small>Generate or enter a Unique Ref and start</small>
+            </span>
+        </button>
+
+        <button class="nhs-action nhs-action--secondary" id="btnSearch">
+            <span class="nhs-action__icon">🗂️</span>
+            <span class="nhs-action__text">
+                <strong>View Previous Translations</strong>
+                <small>Search by date or Unique Ref</small>
+            </span>
+        </button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(err))
+    {
+        <div class="nhs-alert nhs-alert--error" role="alert">@err</div>
+    }
+</section>
+
+<!-- CREATE MODAL -->
+<dialog id="dlgCreate" class="nhs-modal" aria-labelledby="createTitle">
+    <form method="post" action="/Conversations/Create" class="nhs-modal__panel" novalidate>
+        <header class="nhs-modal__head">
+            <h3 id="createTitle" class="nhs-title">Create new Translation</h3>
+            <button type="button" class="nhs-modal__close" aria-label="Close" data-close>✕</button>
+        </header>
+
+        <div class="nhs-modal__body">
+            <p class="hint">Enter a Unique Ref or click “Generate”.</p>
+            <div class="mb-3">
+                <label for="uniqueRef" class="form-label">Unique Ref</label>
+                <div class="nhs-input-row">
+                    <input id="uniqueRef" name="uniqueRef" class="form-control" maxlength="64" required
+                           placeholder="e.g. NHSTR-2025-0001" />
+                    <button type="button" class="pill" id="btnGen">Generate</button>
+                </div>
+                <div class="nhs-input-hint">Format suggestion: <code>NHSTR-YYYY-####</code></div>
+                <div class="nhs-input-error" id="uniqueRefError" hidden>Please enter a Unique Ref.</div>
+            </div>
+            @Html.AntiForgeryToken()
+        </div>
+
+        <footer class="nhs-modal__foot">
+            <button type="button" class="pill nhs-btn-muted" data-close>Cancel</button>
+            <button type="submit" class="pill">Create</button>
+        </footer>
+    </form>
+</dialog>
+
+<!-- SEARCH MODAL -->
+<dialog id="dlgSearch" class="nhs-modal" aria-labelledby="searchTitle">
+    <div class="nhs-modal__panel">
+        <header class="nhs-modal__head">
+            <h3 id="searchTitle" class="nhs-title">Find previous translations</h3>
+            <button type="button" class="nhs-modal__close" aria-label="Close" data-close>✕</button>
+        </header>
+
+        <div class="nhs-modal__body">
+            <form method="get" action="/Conversations/List" class="nhs-grid">
+                <div class="mb-3">
+                    <label class="form-label" for="from">From (UTC)</label>
+                    <input class="form-control" type="date" id="from" name="from" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="to">To (UTC)</label>
+                    <input class="form-control" type="date" id="to" name="to" />
+                </div>
+                <div class="mb-3 nhs-grid__wide">
+                    <label class="form-label" for="ref">Unique Ref</label>
+                    <div class="nhs-input-row">
+                        <input class="form-control" type="text" id="ref" name="uniqueRef" placeholder="NHSTR-2025-0001" />
+                        <div class="nhs-quick">
+                            <button type="button" class="pill nhs-btn-muted" data-preset="today">Today</button>
+                            <button type="button" class="pill nhs-btn-muted" data-preset="7">Last 7 days</button>
+                            <button type="button" class="pill nhs-btn-muted" data-preset="30">Last 30 days</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nhs-modal__foot">
+                    <button type="button" class="pill nhs-btn-muted" data-close>Close</button>
+                    <button class="pill" type="submit">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</dialog>
+
+<script>
+    (function(){
+      const dlgCreate = document.getElementById('dlgCreate');
+      const dlgSearch = document.getElementById('dlgSearch');
+      const btnCreate = document.getElementById('btnCreate');
+      const btnSearch = document.getElementById('btnSearch');
+      const uniqueRef = document.getElementById('uniqueRef');
+      const uniqueRefError = document.getElementById('uniqueRefError');
+      const btnGen = document.getElementById('btnGen');
+
+      // Open/close with focus management
+      function openDialog(d){
+        d.showModal();
+        const first = d.querySelector('input,button,select,textarea');
+        if (first) first.focus();
+      }
+      function closeDialog(e){
+        const d = e.target.closest('dialog');
+        if (d && d.open) d.close();
+      }
+
+      btnCreate.addEventListener('click', () => openDialog(dlgCreate));
+      btnSearch.addEventListener('click', () => openDialog(dlgSearch));
+      document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', closeDialog));
+      [dlgCreate, dlgSearch].forEach(d => d.addEventListener('cancel', e => e.preventDefault())); // force buttons
+
+      // Generate Unique Ref
+      btnGen.addEventListener('click', () => {
+        const now = new Date();
+        const y = now.getUTCFullYear();
+        const n = Math.floor(Math.random() * 9000) + 1000;
+        uniqueRef.value = `NHSTR-${y}-${n}`;
+        uniqueRefError.hidden = true;
+      });
+
+      // Basic inline validation
+      dlgCreate.querySelector('form').addEventListener('submit', (e) => {
+        if (!uniqueRef.value.trim()){
+          e.preventDefault();
+          uniqueRefError.hidden = false;
+          uniqueRef.focus();
+        }
+      });
+
+      // Search presets
+      document.querySelectorAll('[data-preset]').forEach(b => {
+        b.addEventListener('click', () => {
+          const preset = b.getAttribute('data-preset');
+          const from = document.getElementById('from');
+          const to   = document.getElementById('to');
+          const today = new Date();
+          const toISO = d => d.toISOString().slice(0,10);
+
+          if (preset === 'today'){
+            from.value = toISO(today);
+            to.value   = toISO(today);
+          } else {
+            const days = parseInt(preset,10);
+            const fromDate = new Date(today); fromDate.setDate(today.getDate() - days);
+            from.value = toISO(fromDate);
+            to.value   = toISO(today);
+          }
+        });
+      });
+    })();
+</script>

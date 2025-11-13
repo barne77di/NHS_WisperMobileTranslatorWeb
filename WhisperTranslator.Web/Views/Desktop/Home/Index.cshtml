@@ -1,0 +1,41 @@
+@{
+    Layout = "/Views/Desktop/Shared/_Layout.cshtml";
+    var cid = ViewBag.ConversationId as Guid?;
+}
+<section class="card" style="margin-bottom:12px;">
+    <strong>Using the app</strong>
+    <p class="hint">Hold the mic button to speak. Your speech is transcribed, auto‑detected, translated to English, and shown with a flag. Type a reply in English to translate back and play aloud.</p>
+</section>
+
+<section class="chat">
+    <div id="conversation" class="bubble-list"></div>
+    <section class="composer">
+        <button id="btnRecord" class="pill" aria-label="Start listening to other speaker">Start listening 🎙️</button>
+        <button id="btnReplyRecord" class="pill" aria-label="Speak your reply in English">Speak reply 🎤</button>
+        <input id="replyText" placeholder="Type a reply in English…" aria-label="Reply in English" />
+        <button id="btnSend" class="pill" aria-label="Send">Send</button>
+    </section>
+</section>
+@section Scripts {
+    <script src="/js/chat.js" defer></script>
+    <script>
+        // Use a single global shared with chat.js
+        window.conversationId = "@(cid?.ToString() ?? "")" || new URLSearchParams(location.search).get("conversationId") || window.conversationId || crypto.randomUUID();
+
+        window.addEventListener("DOMContentLoaded", async () => {
+          if (window.conversationId) {
+            try {
+              const res = await fetch(`/api/history?conversationId=${window.conversationId}`);
+              if (res.ok) {
+                const items = await res.json();
+                for (const m of items) {
+                  const role = m.role === "assistant" ? "you" : "me";
+                  const extra = m.translation ? `<div class="meta-row"><small>➡️ <strong>${escapeHtml(m.translation)}</strong></small></div>` : "";
+                  addBubble(escapeHtml(m.text), role, extra);
+                }
+              }
+            } catch {}
+          }
+        });
+    </script>
+}

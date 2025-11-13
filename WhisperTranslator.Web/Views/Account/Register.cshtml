@@ -1,0 +1,18 @@
+@{
+    Layout = "/Views/Desktop/Shared/_Layout.cshtml";
+}
+<section class="card" style="max-width:460px;margin:24px auto;">
+    <h2 class="nhs-title" style="margin-bottom:12px;">Create account</h2>
+    <form method="post" asp-action="Register" asp-controller="Account">
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input class="form-control" type="email" name="email" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input class="form-control" type="password" name="password" required />
+            <p class="hint">Minimum 8 characters.</p>
+        </div>
+        <button class="pill" type="submit">Create account</button>
+    </form>
+</section>

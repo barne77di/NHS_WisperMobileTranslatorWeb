@@ -1,0 +1,34 @@
+﻿@model WhisperTranslator.Web.Models.AdminUserEditVm
+@{
+    Layout = "/Views/Desktop/Shared/_Layout.cshtml";
+}
+<section class="card" style="max-width:560px;margin:0 auto;">
+    <h2 class="nhs-title" style="margin-bottom:12px;">Add user</h2>
+
+    <form method="post" asp-action="Create" asp-controller="AdminUsers">
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input class="form-control" asp-for="Email" />
+            <span class="hint">@Html.ValidationMessageFor(m => m.Email)</span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Password (optional)</label>
+            <input class="form-control" asp-for="Password" />
+            <span class="hint">@Html.ValidationMessageFor(m => m.Password)</span>
+            <p class="hint">Leave blank to auto-generate a strong password.</p>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Roles</label>
+            <div style="display:flex;gap:12px;">
+                <label><input type="checkbox" asp-for="RoleUser" /> User</label>
+                <label><input type="checkbox" asp-for="RoleAdmin" /> Admin</label>
+            </div>
+        </div>
+
+        @Html.AntiForgeryToken()
+        <button class="pill" type="submit">Create</button>
+        <a class="pill" href="@Url.Action("Index", "AdminUsers")" style="margin-left:8px;">Cancel</a>
+    </form>
+</section>

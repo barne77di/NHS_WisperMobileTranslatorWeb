@@ -1,0 +1,88 @@
+@{
+    var title = ViewData["Title"] as string ?? "Whisper Translator";
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <!-- Mobile-safe viewport with notches; allow zoom for accessibility -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>@title — Whisper</title>
+
+    <link rel="icon" href="/img/nhs-logo.png" type="image/png" />
+    <link rel="stylesheet" href="/css/site.css" />
+
+    <style>
+        :root {
+            /* Mobile-first spacing + font */
+            --font: 17px;
+            --gap: 14px;
+            --tap: 56px;
+            --card-pad: 16px;
+            --border: #dfe3e6;
+        }
+
+        html, body {
+            font-size: var(--font);
+        }
+
+        .container {
+            padding: 12px;
+        }
+        /* Header trims */
+        .m-header {
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border);
+            background: #fff;
+        }
+
+            .m-header img {
+                height: 28px;
+                width: auto;
+            }
+
+        .m-header__txt h1 {
+            font-size: 1.05rem;
+            margin: 0;
+        }
+
+        .m-header__txt p {
+            margin: 0;
+            color: #5a6872;
+            font-size: .9rem;
+        }
+        /* Footer trims */
+        .m-footer {
+            padding: 12px;
+            border-top: 1px solid var(--border);
+            color: #5a6872;
+            font-size: .9rem;
+            background: #fff;
+        }
+    </style>
+
+    @* IMPORTANT: don’t load chat.js globally. We’ll load it only on the chat page via @section Scripts *@
+</head>
+<body>
+    <header class="m-header" role="banner">
+        <img src="/img/nhs-logo.png" alt="NHS" />
+        <div class="m-header__txt">
+            <h1>NHS Whisper Translator</h1>
+            <p>Live speech translation &amp; playback</p>
+        </div>
+    </header>
+
+    <main class="container" id="maincontent">
+        @RenderBody()
+    </main>
+
+    <footer class="m-footer">
+        © NHS Whisper Translator • Mobile • Tablet • Desktop
+    </footer>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

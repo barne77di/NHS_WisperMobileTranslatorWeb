@@ -1,0 +1,783 @@
+﻿/* NHS-inspired design (no external dependency) */
+:root {
+    /* NHS palette */
+    --nhs-blue: #005EB8;
+    --nhs-dark-blue: #003087;
+    --nhs-bright-blue: #0072CE;
+    --black: #0b0c0c;
+    --white: #ffffff;
+    --grey-1: #425563;
+    --grey-2: #768692;
+    --grey-3: #B1B4B6;
+    --green: #007f3b;
+    --yellow: #ffeb3b;
+    --red: #d5281b;
+    /* UI tokens */
+    --bg: #f0f4f5;
+    --text: #0b0c0c;
+    --card: #ffffff;
+    --border: #dfe3e6;
+    --accent: var(--nhs-blue);
+}
+.pill.recording {
+    background: #d5281b; /* NHS red */
+}
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+    body.nhs-body {
+        margin: 0;
+        color: var(--text);
+        background: var(--bg);
+        font-family: Arial, "Helvetica Neue", Helvetica, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        line-height: 1.45;
+    }
+
+/* Header */
+.nhs-header {
+    background: var(--nhs-blue);
+    color: var(--white);
+    border-bottom: 4px solid var(--nhs-dark-blue);
+}
+
+.nhs-header__container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.nhs-header__logo img {
+    height: 15px;
+    display: block;
+}
+
+.nhs-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: .2px;
+}
+
+.nhs-subtitle {
+    margin: 0;
+    opacity: .9;
+    font-size: .95rem;
+}
+
+/* Layout container */
+.nhs-container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+/* Footer */
+.nhs-footer {
+    margin-top: 24px;
+    background: #F3F2F1;
+    border-top: 1px solid var(--border);
+}
+
+.nhs-footer__container {
+    padding: 16px;
+}
+
+.nhs-footer__text {
+    margin: 0;
+    color: #505a5f;
+    font-size: .9rem;
+}
+
+/* Cards and chat UI */
+.chat {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.bubble-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 60vh;
+}
+
+.bubble {
+    position: relative;
+    max-width: 78%;
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+}
+
+    .bubble.you {
+        align-self: flex-start;
+        background: #F6F8FA;
+    }
+
+    .bubble.me {
+        align-self: flex-end;
+        background: #E6F0FA;
+        border-color: #cfe0f3;
+    }
+
+    .bubble.meta {
+        align-self: center;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        color: #505a5f;
+    }
+
+.meta-row {
+    margin-top: 6px;
+    font-size: .9rem;
+    color: #505a5f;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.flag {
+    width: 20px;
+    height: 14px;
+    object-fit: cover;
+    border-radius: 2px;
+    border: 1px solid #e5e7eb;
+}
+
+/* Composer */
+.composer {
+    position: sticky;
+    bottom: 0;
+    background: #F3F2F1;
+    border-top: 1px solid var(--border);
+    padding: 12px;
+    display: flex;
+    gap: 8px;
+}
+
+    .composer input {
+        flex: 1;
+        padding: 12px 14px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: #fff;
+        color: var(--text);
+    }
+
+.pill {
+    border: none;
+    border-radius: 6px;
+    padding: 10px 14px;
+    background: var(--accent);
+    color: var(--white);
+    font-weight: 700;
+    letter-spacing: .2px;
+    cursor: pointer;
+}
+
+    .pill:hover {
+        background: var(--nhs-bright-blue);
+    }
+
+/* Utilities */
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.hint {
+    color: #505a5f;
+}
+
+/* Responsive refinements */
+@media (min-width:768px) {
+    .bubble {
+        max-width: 70%;
+    }
+}
+
+@media (min-width:1024px) {
+    .bubble {
+        max-width: 60%;
+    }
+}
+/* Action buttons grid */
+.nhs-action-grid {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 640px) {
+    .nhs-action-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.nhs-action {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fff;
+    cursor: pointer;
+    text-align: left;
+    box-shadow: 0 1px 0 rgba(0,0,0,.05);
+}
+
+    .nhs-action:hover {
+        border-color: #c9d3dc;
+        background: #f9fbfc;
+    }
+
+.nhs-action--secondary {
+    background: #f3f6f8;
+}
+
+.nhs-action__icon {
+    font-size: 1.6rem;
+    line-height: 1;
+}
+
+.nhs-action__text small {
+    display: block;
+    color: #505a5f;
+}
+
+/* Modal */
+.nhs-modal {
+    padding: 0;
+    border: none;
+    border-radius: 12px;
+}
+
+    .nhs-modal::backdrop {
+        background: rgba(0,0,0,.35);
+    }
+
+.nhs-modal__panel {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    min-width: min(92vw, 720px);
+}
+
+.nhs-modal__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    background: #fff;
+    border-radius: 12px 12px 0 0;
+}
+
+.nhs-modal__body {
+    padding: 16px;
+    background: #fff;
+}
+
+.nhs-modal__foot {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    padding: 16px;
+    border-top: 1px solid var(--border);
+    background: #fff;
+    border-radius: 0 0 12px 12px;
+}
+
+.nhs-modal__close {
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: #425563;
+}
+
+.nhs-btn-muted {
+    background: #768692;
+}
+
+    .nhs-btn-muted:hover {
+        filter: brightness(1.05);
+    }
+
+/* Inputs row + hints/errors */
+.nhs-input-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+    .nhs-input-row .form-control {
+        flex: 1;
+    }
+
+.nhs-input-hint {
+    color: #505a5f;
+    font-size: .9rem;
+    margin-top: 6px;
+}
+
+.nhs-input-error {
+    color: #d5281b;
+    font-size: .9rem;
+    margin-top: 6px;
+}
+
+/* Simple grid inside modal body */
+.nhs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.nhs-grid__wide {
+    grid-column: 1 / -1;
+}
+
+/* Alert box */
+.nhs-alert {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #f5c6cb;
+    background: #fdecea;
+    color: #6a1a1a;
+}
+
+.nhs-alert--error {
+    border-color: #f1b0b7;
+}
+/* Mobile card container */
+.m-card {
+    margin: 16px auto;
+    padding: 16px;
+    border: 1px solid var(--border, #dfe3e6);
+    border-radius: 12px;
+    background: #fff;
+}
+
+/* Large tappable actions */
+.m-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.m-action {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+    padding: 16px;
+    min-height: 56px;
+    border: 1px solid #dfe3e6;
+    border-radius: 12px;
+    background: #fff;
+    text-align: left;
+    -webkit-tap-highlight-color: transparent;
+}
+
+    .m-action:active {
+        transform: translateY(1px);
+    }
+
+.m-action--secondary {
+    background: #f3f6f8;
+}
+
+.m-action__icon {
+    display: inline-flex;
+    width: 32px;
+    height: 32px;
+    align-items: center;
+    justify-content: center;
+    color: #005eb8;
+}
+
+.m-action__text strong {
+    display: block;
+    font-size: 1.05rem;
+}
+
+.m-action__text small {
+    display: block;
+    color: #505a5f;
+    font-size: .95rem;
+}
+
+/* Inputs & rows */
+.m-input-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+    .m-input-row .form-control {
+        flex: 1;
+        min-height: 44px;
+    }
+
+/* Modal → phone full-screen sheet */
+@media (max-width: 640px) {
+    .m-modal {
+        padding: 0;
+        border: none;
+        width: 100vw;
+        max-width: none;
+        height: auto;
+        margin: 0;
+        border-radius: 0;
+    }
+
+        .m-modal::backdrop {
+            background: rgba(0,0,0,.35);
+        }
+
+    .m-modal__panel {
+        display: flex;
+        flex-direction: column;
+        min-height: 55vh;
+        background: #fff;
+    }
+
+    .m-modal__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 16px;
+        border-bottom: 1px solid #e4eaee;
+    }
+
+    .m-modal__body {
+        padding: 14px 16px;
+    }
+
+    .m-modal__foot {
+        position: sticky;
+        bottom: 0;
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+        padding: 12px 16px;
+        border-top: 1px solid #e4eaee;
+        background: #fff;
+    }
+
+    .m-modal__close {
+        background: transparent;
+        border: none;
+        font-size: 1.1rem;
+        color: #425563;
+    }
+
+    .m-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .m-grid__wide {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Muted button tone */
+.m-btn-muted {
+    background: #768692;
+}
+
+    .m-btn-muted:hover {
+        filter: brightness(1.05);
+    }
+/* Tablet card */
+.t-card {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 980px;
+    border: 1px solid var(--border,#dfe3e6);
+    border-radius: 14px;
+    background: #fff;
+}
+
+/* Two-column actions on tablet, collapse to one on narrow */
+.t-actions {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 900px) {
+    .t-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+.t-action {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    width: 100%;
+    padding: 18px;
+    min-height: 64px;
+    border: 1px solid #dfe3e6;
+    border-radius: 12px;
+    background: #fff;
+    text-align: left;
+    box-shadow: 0 1px 0 rgba(0,0,0,.04);
+}
+
+    .t-action:hover {
+        border-color: #c9d3dc;
+        background: #f9fbfc;
+    }
+
+.t-action--secondary {
+    background: #f3f6f8;
+}
+
+.t-action__icon {
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    color: #005eb8;
+}
+
+.t-action__text strong {
+    display: block;
+    font-size: 1.08rem;
+}
+
+.t-action__text small {
+    display: block;
+    color: #505a5f;
+}
+
+/* Modal (medium width) */
+.t-modal {
+    padding: 0;
+    border: none;
+    border-radius: 12px;
+}
+
+    .t-modal::backdrop {
+        background: rgba(0,0,0,.35);
+    }
+
+.t-modal__panel {
+    display: flex;
+    flex-direction: column;
+    min-width: min(92vw, 760px);
+    background: #fff;
+    border-radius: 12px;
+}
+
+.t-modal__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border-bottom: 1px solid #e4eaee;
+}
+
+.t-modal__body {
+    padding: 16px;
+}
+
+.t-modal__foot {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    padding: 14px 16px;
+    border-top: 1px solid #e4eaee;
+}
+
+.t-modal__close {
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    color: #425563;
+    cursor: pointer;
+}
+
+/* Inputs & quick actions */
+.t-input-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+    .t-input-row .form-control {
+        flex: 1;
+        min-height: 46px;
+    }
+
+.t-quick {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.t-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.t-grid__wide {
+    grid-column: 1 / -1;
+}
+
+/* Muted tone aligned to NHS palette */
+.t-btn-muted {
+    background: #768692;
+}
+
+    .t-btn-muted:hover {
+        filter: brightness(1.05);
+    }
+/* Mobile action cards */
+.m-card {
+    margin: 12px auto;
+    padding: var(--card-pad);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #fff;
+}
+
+.m-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+}
+
+.m-action {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+    padding: 16px 18px;
+    min-height: var(--tap);
+    border: 1px solid #cfd7de;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 1px 0 rgba(0,0,0,.04);
+}
+
+.m-action--secondary {
+    background: #f5f7f9;
+}
+
+.m-action__icon {
+    display: inline-flex;
+    width: 32px;
+    height: 32px;
+    align-items: center;
+    justify-content: center;
+    color: #005eb8;
+}
+
+.m-action__text strong {
+    display: block;
+    font-size: 1.05rem;
+    line-height: 1.25;
+}
+
+.m-action__text small {
+    display: block;
+    color: #505a5f;
+    line-height: 1.2;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #cfd7de;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.pill {
+    padding: 12px 16px;
+    min-height: 44px;
+    border-radius: 999px;
+    border: none;
+    background: #005eb8;
+    color: #fff;
+}
+
+    .pill:active {
+        transform: translateY(1px);
+    }
+
+/* Mobile sheet dialogs */
+.m-modal {
+    padding: 0;
+    border: none;
+    width: 100vw;
+    max-width: none;
+    margin: 0;
+    border-radius: 0;
+}
+
+    .m-modal::backdrop {
+        background: rgba(0,0,0,.35);
+    }
+
+.m-modal__panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 60vh;
+    background: #fff;
+}
+
+.m-modal__head, .m-modal__foot {
+    padding: 14px 16px;
+    border-color: #e4eaee;
+}
+
+.m-modal__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e4eaee;
+}
+
+.m-modal__body {
+    padding: 14px 16px;
+}
+
+.m-modal__foot {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    border-top: 1px solid #e4eaee;
+    background: #fff;
+}
+
+.m-btn-muted {
+    background: #768692;
+}

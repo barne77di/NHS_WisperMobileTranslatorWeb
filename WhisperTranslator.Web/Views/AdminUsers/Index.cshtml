@@ -1,0 +1,60 @@
+﻿@model IEnumerable<WhisperTranslator.Web.Models.AdminUserListItem>
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+    var msg = TempData["Message"] as string;
+    var err = TempData["Error"] as string;
+}
+<section class="card" style="margin-bottom:12px;">
+    <h2 class="nhs-title" style="margin:0 0 8px;">Users</h2>
+    <form method="get" style="display:flex;gap:8px;align-items:center;">
+        <input name="q" class="form-control" placeholder="Search email…" value="@Context.Request.Query["q"]" />
+        <button class="pill" type="submit">Search</button>
+        <a class="pill" href="@Url.Action("Create", "AdminUsers")" style="margin-left:auto;">Add user</a>
+    </form>
+    @if (!string.IsNullOrWhiteSpace(msg))
+    {
+        <div class="hint" style="margin-top:8px;">@msg</div>
+    }
+    @if (!string.IsNullOrWhiteSpace(err))
+    {
+        <div class="hint" style="margin-top:8px;color:#d5281b;">@err</div>
+    }
+</section>
+
+<section class="card">
+    <table class="table" style="width:100%; border-collapse:collapse;">
+        <thead>
+            <tr>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid #dfe3e6;">Email</th>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid #dfe3e6;">Roles</th>
+                <th style="padding:8px;border-bottom:1px solid #dfe3e6;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var u in Model)
+            {
+                <tr>
+                    <td style="padding:8px;border-bottom:1px solid #eef2f4;">@u.Email</td>
+                    <td style="padding:8px;border-bottom:1px solid #eef2f4;">
+                        @if (u.IsAdmin)
+                        {
+                            <span>Admin</span>
+                        }
+     @if (u.IsUser)
+    {
+                            <span>@(u.IsAdmin ? ", " : "")User</span>
+                        }
+                    </td>
+                    <td style="padding:8px;border-bottom:1px solid #eef2f4; text-align:right;">
+                        <a class="pill" href="@Url.Action("Edit", "AdminUsers", new { id = u.Id })">Edit</a>
+                        <form method="post" asp-action="Delete" asp-controller="AdminUsers" style="display:inline;">
+                            <input type="hidden" name="id" value="@u.Id" />
+                            @Html.AntiForgeryToken()
+                            <button class="pill" type="submit" onclick="return confirm('Delete user @u.Email ?');" style="background:#d5281b;">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>

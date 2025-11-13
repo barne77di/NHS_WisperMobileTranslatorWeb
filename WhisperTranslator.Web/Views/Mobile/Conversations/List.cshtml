@@ -1,0 +1,36 @@
+@model IEnumerable<WhisperTranslator.Web.Models.Conversation>
+@{
+    Layout = "/Views/Desktop/Shared/_Layout.cshtml";
+}
+<section class="card" style="max-width:960px;margin:24px auto;">
+    <h2 class="nhs-title" style="margin:0 0 12px;">Previous Translations</h2>
+    <p class="hint">Click a row to open the conversation.</p>
+
+    <table class="table" style="width:100%; border-collapse:collapse;">
+        <thead>
+            <tr>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid #dfe3e6;">Unique Ref</th>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid #dfe3e6;">Title</th>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid #dfe3e6;">Created (UTC)</th>
+                <th style="padding:8px;border-bottom:1px solid #dfe3e6;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model)
+            {
+                <tr>
+                    <td style="padding:8px;border-bottom:1px solid #eef2f4;">@c.UniqueRef</td>
+                    <td style="padding:8px;border-bottom:1px solid #eef2f4;">@c.Title</td>
+                    <td style="padding:8px;border-bottom:1px solid #eef2f4;">@c.CreatedUtc.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td style="padding:8px;border-bottom:1px solid #eef2f4; text-align:right;">
+                        <a class="pill" href="@Url.Action("Open", "Conversations", new { id = c.Id })">Open</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div style="margin-top:12px;">
+        <a class="pill" href="@Url.Action("Start", "Home")" style="background:#768692;">Back</a>
+    </div>
+</section>
