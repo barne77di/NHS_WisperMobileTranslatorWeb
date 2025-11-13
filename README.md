@@ -1,4 +1,4 @@
-# WhisperTranlator
+# WhisperTranslator
 
 Whisper Translator has been designed to allow users of the NHS.
 This Open Source Solution, uses Azure OPen AI Services and Azure SQL DB to create a Web App which runs in dot net 9.0 on mobile devices / Tablet and Desktop Devices.
